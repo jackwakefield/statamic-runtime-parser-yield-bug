@@ -1,0 +1,33 @@
+version: "3"
+services:
+  database:
+    image: mariadb:10.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ba
+      MYSQL_DATABASE: ba
+      MYSQL_USER: ba
+      MYSQL_PASSWORD: ba
+    ports:
+      - 3306:3306
+    volumes:
+      - "./docker/databases:/var/lib/mysql"
+      - "./docker/database-import:/docker-entrypoint-initdb.d"
+  redis:
+    image: eqalpha/keydb
+  www:
+    build: .
+    volumes:
+      - blooming-artificial-statamic-sync:/var/www
+      - blooming-artificial-public-sync:/var/www/html
+    links:
+      - database
+      - redis
+    ports:
+      - 8080:80
+      - 8443:443
+
+volumes:
+  blooming-artificial-statamic-sync:
+    external: true
+  blooming-artificial-public-sync:
+    external: true

@@ -1,0 +1,30 @@
+version: "3"
+services:
+  database:
+    image: mariadb:10.4
+    environment:
+      MYSQL_ROOT_PASSWORD: ba
+      MYSQL_DATABASE: ba
+      MYSQL_USER: ba
+      MYSQL_PASSWORD: ba
+    volumes:
+      - "./docker/databases:/var/lib/mysql"
+      - "./docker/database-import:/docker-entrypoint-initdb.d"
+  redis:
+    image: eqalpha/keydb
+  www:
+    build: .
+    volumes:
+      - .:/var/www
+      - ./public:/var/www/html
+      - ~/.ssh:/.ssh
+      # - $SSH_AUTH_SOCK:/ssh-agent
+    links:
+      - database
+      - redis
+    ports:
+      - 8080:80
+      - 8443:443
+    env_file: .env.docker
+    environment:
+        SSH_AUTH_SOCK: /ssh-agent

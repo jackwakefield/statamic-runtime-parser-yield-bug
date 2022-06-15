@@ -1,0 +1,8 @@
+/.vscode
+/.github
+/.cache
+/data
+/docker
+/node_modules
+/cypress/videos
+/cypress/screenshots
